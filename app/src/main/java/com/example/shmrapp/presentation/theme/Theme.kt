@@ -1,4 +1,4 @@
-package com.example.shmrapp.ui.theme
+package com.example.shmrapp.presentation.theme
 
 import android.app.Activity
 import android.os.Build

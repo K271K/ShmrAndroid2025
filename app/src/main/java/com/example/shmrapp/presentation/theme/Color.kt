@@ -1,4 +1,4 @@
-package com.example.shmrapp.ui.theme
+package com.example.shmrapp.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
