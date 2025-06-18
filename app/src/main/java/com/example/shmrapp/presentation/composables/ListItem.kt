@@ -1,51 +1,103 @@
 package com.example.shmrapp.presentation.composables
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ListItem(
+fun MyListItem(
     modifier: Modifier = Modifier,
-    lead: (@Composable () -> Unit)? = null,
-    content: @Composable () -> Unit,
-    trail: (@Composable () -> Unit)? = null,
+    leadContent: (@Composable () -> Unit)? = null,
+    content: @Composable () -> Unit = {},
+    trailContent: @Composable () -> Unit = {},
     onClick: (() -> Unit)? = null
 ) {
-    val clickableModifier = if (onClick != null) {
-        modifier
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp)
-    } else {
-        modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-    }
-
     Row(
-        modifier = clickableModifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(
+                enabled = if (onClick == null) false else true,
+                onClick = {
+                    onClick?.invoke()
+                }
+            )
+            .then(modifier)
+            .padding(horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        lead?.let {
-            Box(modifier = Modifier.padding(end = 16.dp)) {
-                it()
-            }
+        leadContent?.let {
+            it()
+            Spacer(modifier = Modifier.width(16.dp))
         }
-
         Box(modifier = Modifier.weight(1f)) {
             content()
         }
-
-        trail?.let {
-            Box(modifier = Modifier.padding(start = 16.dp)) {
-                it()
-            }
-        }
+        Spacer(modifier = Modifier.width(16.dp))
+        trailContent()
     }
+}
+
+@Composable
+fun MyListItemWithLeadIcon(
+    icon: String,
+    iconBg: Color,
+    content: @Composable () -> Unit,
+    trailContent: @Composable () -> Unit,
+    modifier: Modifier,
+    onClick: (() -> Unit)? = null
+) {
+    MyListItem(
+        modifier = modifier,
+        leadContent = {
+            Box(
+                modifier = Modifier
+                    .size(24.dp)
+                    .clip(CircleShape)
+                    .background(iconBg)
+            ) {
+                Text(text = icon, modifier = Modifier.align(Alignment.Center))
+            }
+        },
+        content = {
+            content()
+        },
+        trailContent = {
+            trailContent()
+        },
+        onClick = onClick
+    )
+}
+
+@Composable
+fun MyListItemOnlyText(
+    content: @Composable () -> Unit,
+    trailContent: @Composable () -> Unit,
+    modifier: Modifier,
+    onClick: (() -> Unit)? = null
+) {
+    MyListItem(
+        modifier = modifier,
+        leadContent = null,
+        content = {
+            content()
+        },
+        trailContent = {
+            trailContent()
+        },
+        onClick = onClick
+    )
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -20,9 +21,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.shmrapp.R
-import com.example.shmrapp.presentation.composables.ArticleItem
+import com.example.shmrapp.presentation.composables.MyListItemWithLeadIcon
 import com.example.shmrapp.presentation.models.ArticleModel
+import com.example.shmrapp.presentation.theme.LightGreen
 import com.example.shmrapp.presentation.theme.ShmrAppTheme
 
 val articleMockList = listOf(
@@ -70,7 +73,9 @@ fun ArticlesScreenContent(){
             value = text,
             onValueChange = { text = it },
             label = {Text("Найти статью")},
-            modifier = Modifier.fillMaxWidth().background(colorResource(R.color.gray_light)),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(colorResource(R.color.gray_light)),
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
@@ -80,7 +85,18 @@ fun ArticlesScreenContent(){
         )
         LazyColumn {
             items(articleMockList){ article->
-                ArticleItem(article)
+                MyListItemWithLeadIcon(
+                    modifier = Modifier
+                        .height(70.dp),
+                    icon = article.icon,
+                    iconBg = LightGreen,
+                    content = {
+                        Column {
+                            Text(text = article.label)
+                        }
+                    },
+                    trailContent = {}
+                )
                 HorizontalDivider()
             }
         }

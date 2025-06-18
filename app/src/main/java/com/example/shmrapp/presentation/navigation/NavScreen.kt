@@ -10,7 +10,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.shmrapp.presentation.composables.screens.AccountScreenContent
+import com.example.shmrapp.presentation.composables.screens.AddExpenseScreenContent
 import com.example.shmrapp.presentation.composables.screens.ArticlesScreenContent
+import com.example.shmrapp.presentation.composables.screens.ExpenseHistoryScreenContent
 import com.example.shmrapp.presentation.composables.screens.ExpensesScreenContent
 import com.example.shmrapp.presentation.composables.screens.IncomeScreenContent
 import com.example.shmrapp.presentation.composables.screens.SettingsScreenContent
@@ -50,6 +52,12 @@ fun NavScreen() {
             }
             composable<ScreenRoutes.Settings> {
                 SettingsScreenContent()
+            }
+            composable<ScreenRoutes.ExpenseHistory> {
+                ExpenseHistoryScreenContent()
+            }
+            composable<ScreenRoutes.AddExpense> {
+                AddExpenseScreenContent()
             }
         }
     }

@@ -34,12 +34,8 @@ fun BottomNavigationBar(
                 label = { Text(text = item.label, fontSize = 11.sp) },
                 selected = isSelected,
                 onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(navController.graph.startDestinationId){
-                            saveState = true
-                        }
-                        launchSingleTop = true
-                        restoreState = true
+                    navController.navigate(item.route){
+                        popUpTo(0)
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
