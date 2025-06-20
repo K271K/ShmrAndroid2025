@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,12 +24,18 @@ fun NavScreen() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
+    //Действие которое не связано с навигацией (например подтверждение создания нового расхода)
+    val topAppBarAction = remember {
+        mutableStateOf({})
+    }
+
     Scaffold(
         bottomBar = {
             BottomNavigationBar(navController)
         },
         topBar = {
-            FinanceTopAppBar(currentRoute, navController)
+            FinanceTopAppBar(currentRoute, navController, topAppBarAction.value)
         },
         floatingActionButton = {
             FinanceFloatingActionButton(currentRoute, navController)
@@ -57,7 +65,7 @@ fun NavScreen() {
                 ExpenseHistoryScreenContent()
             }
             composable<ScreenRoutes.AddExpense> {
-                AddExpenseScreenContent()
+                AddExpenseScreenContent(topAppBarAction)
             }
         }
     }

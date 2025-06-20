@@ -1,4 +1,4 @@
-package com.example.shmrapp.domain.models
+package com.example.shmrapp.domain.models.transactions
 
 data class TransactionModel(
     val account: Account,

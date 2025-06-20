@@ -22,7 +22,8 @@ import com.example.shmrapp.R
 @Composable
 fun FinanceTopAppBar(
     currentRoute: String?,
-    navController: NavController
+    navController: NavController,
+    value: () -> Unit,
 ) {
     when (currentRoute) {
         ScreenRoutes.Account::class.qualifiedName -> {
@@ -121,7 +122,7 @@ fun FinanceTopAppBar(
                 rightButton = {
                     IconButton(
                         onClick = {
-                            //TODO: Go to history
+                            value.invoke()
                         }
                     ) {
                         Icon(

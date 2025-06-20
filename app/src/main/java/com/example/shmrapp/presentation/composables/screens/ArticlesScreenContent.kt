@@ -1,6 +1,7 @@
 package com.example.shmrapp.presentation.composables.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,62 +10,32 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.shmrapp.R
 import com.example.shmrapp.presentation.composables.MyListItemWithLeadIcon
-import com.example.shmrapp.presentation.models.ArticleModel
 import com.example.shmrapp.presentation.theme.LightGreen
-import com.example.shmrapp.presentation.theme.ShmrAppTheme
-
-val articleMockList = listOf(
-    ArticleModel(
-        icon = "\uD83C\uDFE0",
-        label = "Аренда квартиры",
-    ),
-    ArticleModel(
-        icon = "\uD83D\uDC57",
-        label = "Одежда",
-    ),
-    ArticleModel(
-        icon = "\uD83D\uDC36",
-        label = "На собачку",
-    ),
-    ArticleModel(
-        icon = "\uD83D\uDC36",
-        label = "На собачку",
-    ),
-    ArticleModel(
-        icon = "РК",
-        label = "Ремонт квартиры",
-    ),
-    ArticleModel(
-        icon = "\uD83C\uDF6D",
-        label = "Продукты",
-    ),
-    ArticleModel(
-        icon = "\uD83C\uDFCB\uFE0F\u200D♂\uFE0F",
-        label = "Спортзал",
-    ),
-    ArticleModel(
-        icon = "\uD83D\uDC8A",
-        label = "Медицина",
-    )
-)
+import com.example.shmrapp.presentation.viewModels.ArticlesViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ArticlesScreenContent(){
+    val articlesViewModel = koinViewModel<ArticlesViewModel>()
+    val state by articlesViewModel.state.collectAsState()
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -83,30 +54,35 @@ fun ArticlesScreenContent(){
                 )
             }
         )
-        LazyColumn {
-            items(articleMockList){ article->
-                MyListItemWithLeadIcon(
-                    modifier = Modifier
-                        .height(70.dp),
-                    icon = article.icon,
-                    iconBg = LightGreen,
-                    content = {
-                        Column {
-                            Text(text = article.label)
-                        }
-                    },
-                    trailContent = {}
-                )
-                HorizontalDivider()
+        when {
+            state.isLoading -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
+            state.error != null -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = state.error ?: "Неизвестная ошибка", color = MaterialTheme.colorScheme.error)
+                }
+            }
+            else -> {
+                LazyColumn {
+                    items (state.articles) { article ->
+                        MyListItemWithLeadIcon(
+                            modifier = Modifier.height(70.dp),
+                            icon = article.emoji,
+                            iconBg = LightGreen,
+                            content = {
+                                Column {
+                                    Text(text = article.name)
+                                }
+                            },
+                            trailContent = {}
+                        )
+                        HorizontalDivider()
+                    }
+                }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ArticlesScreenContentPreview(){
-    ShmrAppTheme {
-        ArticlesScreenContent()
     }
 }

@@ -84,9 +84,9 @@ fun MyListItemWithLeadIcon(
 
 @Composable
 fun MyListItemOnlyText(
+    modifier: Modifier,
     content: @Composable () -> Unit,
     trailContent: @Composable () -> Unit,
-    modifier: Modifier,
     onClick: (() -> Unit)? = null
 ) {
     MyListItem(
