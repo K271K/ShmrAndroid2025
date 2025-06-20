@@ -1,6 +1,10 @@
 package com.example.shmrapp.presentation.navigation
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -18,7 +22,8 @@ import com.example.shmrapp.R
 @Composable
 fun FinanceTopAppBar(
     currentRoute: String?,
-    navController: NavController
+    navController: NavController,
+    value: () -> Unit,
 ) {
     when (currentRoute) {
         ScreenRoutes.Account::class.qualifiedName -> {
@@ -36,20 +41,18 @@ fun FinanceTopAppBar(
                 }
             )
         }
-
         ScreenRoutes.Articles::class.qualifiedName -> {
             MyTopAppBar(
                 title = "Мои статьи"
             )
         }
-
         ScreenRoutes.Expenses::class.qualifiedName -> {
             MyTopAppBar(
                 title = "Расходы сегодня",
                 rightButton = {
                     IconButton(
                         onClick = {
-                            //TODO: Go to history
+                            navController.navigate(ScreenRoutes.ExpenseHistory)
                         }
                     ) {
                         Icon(
@@ -60,7 +63,6 @@ fun FinanceTopAppBar(
                 }
             )
         }
-
         ScreenRoutes.Income::class.qualifiedName -> {
             MyTopAppBar(
                 title = "Доходы сегодня",
@@ -78,10 +80,71 @@ fun FinanceTopAppBar(
                 }
             )
         }
-
         ScreenRoutes.Settings::class.qualifiedName -> {
             MyTopAppBar(
                 title = "Настройки"
+            )
+        }
+        ScreenRoutes.ExpenseHistory::class.qualifiedName -> {
+            MyTopAppBar(
+                title = "Моя история",
+                rightButton = {
+                    IconButton(
+                        onClick = {
+                            //TODO: Go to history
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.graphics_icon),
+                            contentDescription = "Go to history"
+                        )
+                    }
+                },
+                leftButton = {
+                    IconButton(
+                        onClick = {
+                            navController.navigate(ScreenRoutes.Expenses){
+                                popUpTo(0)
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = "Go to history"
+                        )
+                    }
+                }
+            )
+        }
+        ScreenRoutes.AddExpense::class.qualifiedName -> {
+            MyTopAppBar(
+                title = "Моя расходы",
+                rightButton = {
+                    IconButton(
+                        onClick = {
+                            value.invoke()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = "Добавить расход"
+                        )
+                    }
+                },
+                leftButton = {
+                    IconButton(
+                        onClick = {
+                            navController.navigate(ScreenRoutes.Expenses){
+                                popUpTo(0)
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Go to history"
+                        )
+                    }
+                }
             )
         }
     }

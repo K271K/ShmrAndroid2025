@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "ShmrApp"
 include(":app")
- 
+include(":data")
+include(":domain")

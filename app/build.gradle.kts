@@ -42,6 +42,13 @@ android {
 
 dependencies {
 
+    implementation(project(path = ":domain"))
+    implementation(project(path = ":data"))
+
+    implementation(libs.koin.compose)
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose.viewmodel)
+
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.splashscreen)
