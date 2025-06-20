@@ -21,7 +21,9 @@ fun FinanceFloatingActionButton(
                 shape = CircleShape,
                 containerColor = colorResource(R.color.green_dark),
                 contentColor = colorResource(R.color.white),
-                onClick = {}
+                onClick = {
+                    navController.navigate(ScreenRoutes.AddExpense)
+                }
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
