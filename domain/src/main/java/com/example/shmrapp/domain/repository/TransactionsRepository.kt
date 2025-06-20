@@ -4,9 +4,9 @@ import com.example.shmrapp.domain.models.transactions.TransactionCreateResponse
 import com.example.shmrapp.domain.models.transactions.TransactionModel
 import com.example.shmrapp.domain.models.transactions.TransactionRequest
 
-interface ExpenseRepository {
+interface TransactionsRepository {
 
-    suspend fun getTransactions(date: String): List<TransactionModel>
+    suspend fun getTransactionsByPeriod(accountId: Int, startDate: String? = null, endDate: String? = null): List<TransactionModel>
 
     suspend fun getTransactionById(id: Int): TransactionModel
 

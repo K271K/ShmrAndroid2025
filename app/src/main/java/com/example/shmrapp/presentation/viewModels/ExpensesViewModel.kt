@@ -2,7 +2,7 @@ package com.example.shmrapp.presentation.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.shmrapp.domain.usecase.GetExpensesFromServerUseCase
+import com.example.shmrapp.domain.usecase.GetTodayTransactionsUseCase
 import com.example.shmrapp.presentation.models.ExpenseModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,12 +14,13 @@ import java.util.TimeZone
 
 data class ExpensesTodayState(
     val expenses: List<ExpenseModel> = emptyList(),
+    val totalAmount: Int = 0,
     val isLoading: Boolean = false,
     val error: String? = null
 )
 
 class ExpensesViewModel(
-    private val getExpensesFromServerUseCase: GetExpensesFromServerUseCase,
+    private val getTodayTransactionsUseCase: GetTodayTransactionsUseCase,
 ):ViewModel() {
     private val _state = MutableStateFlow(ExpensesTodayState())
     val state = _state.asStateFlow()
@@ -33,20 +34,22 @@ class ExpensesViewModel(
             _state.value = _state.value.copy(isLoading = true)
             try {
                 val today = getTodayInUtc()
-                val allTransactions = getExpensesFromServerUseCase.execute(today)
-                val expensesOnly = allTransactions.filter { it.category.isIncome == false }
-                val expensesMapped = expensesOnly.map {
+                var totalAmount = 0.0
+                val allTransactions = getTodayTransactionsUseCase.execute(startDate = today, endDate = today, isIncome = false)
+                val expensesMapped = allTransactions.map {
+                    totalAmount+=it.amount.toDouble()
                     ExpenseModel(
                         icon = it.category.emoji,
                         label = it.category.name,
-                        amount = it.amount,
+                        amount = it.amount.toDouble().toInt().toString(),
                         comment = it.comment
                     )
                 }
                 _state.value = _state.value.copy(
                     isLoading = false,
                     expenses = expensesMapped,
-                    error = null
+                    error = null,
+                    totalAmount = totalAmount.toInt()
                 )
             } catch (e: Exception) {
                 _state.value = _state.value.copy(

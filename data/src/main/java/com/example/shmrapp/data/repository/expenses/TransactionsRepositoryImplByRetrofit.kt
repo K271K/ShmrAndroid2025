@@ -5,16 +5,15 @@ import com.example.shmrapp.data.network.RetrofitClient
 import com.example.shmrapp.domain.models.transactions.TransactionCreateResponse
 import com.example.shmrapp.domain.models.transactions.TransactionModel
 import com.example.shmrapp.domain.models.transactions.TransactionRequest
-import com.example.shmrapp.domain.repository.ExpenseRepository
+import com.example.shmrapp.domain.repository.TransactionsRepository
 import retrofit2.HttpException
 
-class ExpenseRepositoryImplByRetrofit: ExpenseRepository {
+class TransactionsRepositoryImplByRetrofit: TransactionsRepository {
 
     private val retrofitApi = RetrofitClient.retrofitApi
 
-    override suspend fun getTransactions(date: String): List<TransactionModel> {
-        val today = date
-        val transactions = retrofitApi.getTransactionsByPeriod(211, today, today)
+    override suspend fun getTransactionsByPeriod(accountId: Int, startDate: String?, endDate: String?): List<TransactionModel> {
+        val transactions = retrofitApi.getTransactionsByPeriod(accountId, startDate, endDate)
         Log.d("ExpenseRepositoryImplByRetrofit", "getTransactions: $transactions")
         return transactions
     }
