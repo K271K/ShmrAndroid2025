@@ -6,7 +6,7 @@ import com.example.shmrapp.domain.models.transactions.TransactionRequest
 
 interface TransactionsRepository {
 
-    suspend fun getTransactionsByPeriod(accountId: Int, startDate: String? = null, endDate: String? = null): List<TransactionModel>
+    suspend fun getTransactionsByPeriod(accountId: Int, startDate: String? = null, endDate: String? = null): Result<List<TransactionModel>>
 
     suspend fun getTransactionById(id: Int): TransactionModel
 

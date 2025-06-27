@@ -1,9 +1,9 @@
 package com.example.shmrapp.di
 
-import com.example.shmrapp.domain.usecase.AddTranscationUseCase
-import com.example.shmrapp.domain.usecase.GetArticlesFromServerUseCase
-import com.example.shmrapp.domain.usecase.GetTodayTransactionsUseCase
-import com.example.shmrapp.domain.usecase.GetTransactionsByPeriodUseCase
+import com.example.shmrapp.domain.usecases.transactions.AddTransactionUseCase
+import com.example.shmrapp.domain.usecases.transactions.GetTodayTransactionsUseCase
+import com.example.shmrapp.domain.usecases.transactions.GetTransactionsByPeriodUseCase
+import com.example.shmrapp.domain.usecases.article.GetArticlesFromServerUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -16,8 +16,8 @@ val domainModule = module {
         GetArticlesFromServerUseCase(articleRepository = get())
     }
 
-    factory<AddTranscationUseCase> {
-        AddTranscationUseCase(transactionsRepository = get())
+    factory<AddTransactionUseCase> {
+        AddTransactionUseCase(transactionsRepository = get())
     }
 
     factory<GetTransactionsByPeriodUseCase> {
